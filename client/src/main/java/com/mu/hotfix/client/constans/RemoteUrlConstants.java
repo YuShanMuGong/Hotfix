@@ -6,6 +6,9 @@ public final class RemoteUrlConstants {
 
     }
 
+    /**
+     * 获取远程Class 的 API 接口
+     */
     public static final String FETCH_CLASS = "";
 
 }

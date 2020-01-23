@@ -8,7 +8,7 @@ public interface ICacheManager {
 
     byte[] get(String key);
 
-    void invalide(String key);
+    void invalid(String key);
 
     List<String> listAllKeys();
 
