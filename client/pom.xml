@@ -5,6 +5,7 @@
         <artifactId>hotfix</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <packaging>jar</packaging>
     <artifactId>client</artifactId>
     <name>hotfix client ${project.version}</name>
     <properties>

@@ -7,9 +7,10 @@
   <groupId>com.mu</groupId>
   <artifactId>hotfix</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
   <name>hotfix</name>
-  <!-- FIXME change it to the project's website -->
+
   <url>http://www.example.com</url>
 
   <modules>
