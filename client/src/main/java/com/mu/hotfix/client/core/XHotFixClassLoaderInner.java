@@ -1,4 +1,4 @@
-package com.mu.hotfix.client;
+package com.mu.hotfix.client.core;
 
 import com.mu.hotfix.client.cache.ICacheManager;
 import com.mu.hotfix.client.config.IConfigManager;
@@ -8,10 +8,14 @@ import com.mu.hotfix.client.exception.HotFixClientException;
 import com.mu.hotfix.client.remote.IRemoteManager;
 import com.mu.hotfix.client.store.ILocalStoreManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * 自定义的支持热更新的ClassLoader
  */
-public class XHotFixClassLoader extends ClassLoader {
+public class XHotFixClassLoaderInner extends ClassLoader {
 
     private ICacheManager cacheManager;
 
@@ -21,24 +25,38 @@ public class XHotFixClassLoader extends ClassLoader {
 
     private ILocalStoreManager localStoreManager;
 
-    private XHotFixClassLoader(){
+    private String classLoaderName;
 
+    private List<String> loadedClassName;
+
+    public XHotFixClassLoaderInner(ClassLoader parentClassLoader , String name){
+        super(parentClassLoader);
+        this.classLoaderName = name;
+        loadedClassName = new ArrayList<>();
     }
 
-    public static XHotFixClassLoader getInstance(){
-        return XHotFixClassLoaderHolder.loader;
+    @Override
+    public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        return super.loadClass(name, resolve);
     }
 
     @Override
     protected Class<?> findClass(String name){
+        byte[] classBytes = findClassBytes(name);
+        Class<?> cl = defineClass(name,classBytes,0,classBytes.length);
+        loadedClassName.add(name);
+        return cl;
+    }
+
+    private byte[] findClassBytes(String name){
         // 缓存命中
         if(cacheManager.get(name) != null){
-            byte[] bytes = cacheManager.get(name);
-            return defineClass(name,bytes,0,bytes.length);
+            return cacheManager.get(name);
         }
         try {
             // 从远程服务，获取class文件
             byte[] remoteClass = remoteManager.getClass(null,name);
+            // 获取远程Class失败
             if(remoteClass == null || remoteClass.length == 0){
                 if(Boolean.valueOf(configManager.getConfig(ConfigConstants.FETCH_LOCAL_IF_REMOTE_FAIL))){
                     throw new HotFixClientException(ErrorCodes.FETCH_REMOTE_CLASS_FAIL,"fetch remote class return null");
@@ -47,17 +65,20 @@ public class XHotFixClassLoader extends ClassLoader {
                 if(localClass == null || localClass.length == 0){
                     throw new HotFixClientException(ErrorCodes.FETCH_CLASS_FAIL,"can not find class");
                 }
-                return defineClass(name,localClass,0,localClass.length);
+                return localClass;
             }
-            return defineClass(name,remoteClass,0,remoteClass.length);
+            return remoteClass;
         } catch (Exception e){
             throw new HotFixClientException(ErrorCodes.UNKNOW_EXCEPTION,e);
         }
     }
 
-    private static class XHotFixClassLoaderHolder{
-        private static final XHotFixClassLoader loader = new XHotFixClassLoader();
+    public List<String> getLoadedClassNameList(){
+        return Collections.unmodifiableList(loadedClassName);
     }
 
-
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "#" + classLoaderName;
+    }
 }
