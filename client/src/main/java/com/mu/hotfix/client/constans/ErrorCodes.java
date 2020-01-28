@@ -15,7 +15,7 @@ public class ErrorCodes {
     /**
      * 未知异常
      */
-    public static final String UNKNOW_EXCEPTION = "1-E-3";
+    public static final String UN_KNOW_EXCEPTION = "1-E-3";
 
     /**
      * 参数非法

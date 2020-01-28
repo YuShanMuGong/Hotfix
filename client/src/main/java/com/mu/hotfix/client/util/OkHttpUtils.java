@@ -23,7 +23,7 @@ public final class OkHttpUtils {
     }
 
     public static String getJson(String url , Map<String,String> params) throws Exception{
-        FormBody.Builder formBodyBuilder = new FormBody.Builder();
+        FormBody.Builder formBodyBuilder = new FormBody.Builder(charset);
         for (Map.Entry<String,String> item : params.entrySet()){
             formBodyBuilder.add(item.getKey(),item.getValue());
         }

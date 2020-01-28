@@ -9,11 +9,11 @@ public class FileUtil {
 
     public static byte[] readFile(String path){
         if(StringUtil.isEmpty(path)){
-            return null;
+            throw new IllegalArgumentException("readFile params error");
         }
         File file = new File(path);
         if(!file.exists() || !file.canRead()){
-            return null;
+            throw new IllegalStateException("read file fail,file not exist or can not read");
         }
         try(FileInputStream fin = new FileInputStream(file) ;
                 ByteArrayOutputStream bout = new ByteArrayOutputStream()){
@@ -24,7 +24,7 @@ public class FileUtil {
             }
             return bout.toByteArray();
         }catch (Exception e){
-            return null;
+            throw new IllegalStateException("read file fail",e);
         }
     }
 
