@@ -2,6 +2,10 @@ package com.mu.hotfix.client.constans;
 
 public class ConfigConstants {
 
+    public static final String CONFIG_FILE_KEY = "configPath";
+
+    public static final String DEFAULT_CONFIG_FILE_PATH = "hotfix_config.properties";
+
     public static final String REMOTE_SRV_HOST = "";
 
     /**

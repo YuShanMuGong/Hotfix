@@ -17,15 +17,15 @@ import java.util.Map;
 
 public class RemoteManagerImpl implements IRemoteManager {
 
-    private IConfigManager configAction;
+    private String baseRemoteHost;
 
-    public RemoteManagerImpl(IConfigManager configAction){
-        this.configAction = configAction;
+    public RemoteManagerImpl(String baseRemoteHost){
+        this.baseRemoteHost = baseRemoteHost;
     }
 
     @Override
     public RemoteClassBO getClass(String app, String className) {
-        String url = configAction.getConfig(ConfigConstants.REMOTE_SRV_HOST + RemoteUrlConstants.FETCH_CLASS);
+        String url = baseRemoteHost + RemoteUrlConstants.FETCH_CLASS;
         Map<String,String> params = new HashMap<>();
         params.put("app",app);
         params.put("className",className);
@@ -39,7 +39,7 @@ public class RemoteManagerImpl implements IRemoteManager {
 
     @Override
     public List<RemoteClassBO> getAllClass(String app) {
-        String url = configAction.getConfig(ConfigConstants.REMOTE_SRV_HOST + RemoteUrlConstants.FETCH_ALL_CLASS);
+        String url = baseRemoteHost + RemoteUrlConstants.FETCH_ALL_CLASS;
         Map<String,String> params = new HashMap<>();
         params.put("app",app);
         try {

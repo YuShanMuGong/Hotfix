@@ -1,6 +1,5 @@
 package com.mu.hotfix.client.manager.store.impl;
 
-import com.mu.hotfix.client.constans.ConfigConstants;
 import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
 import com.mu.hotfix.client.manager.store.ILocalStoreManager;
@@ -9,22 +8,14 @@ import com.mu.hotfix.common.util.StringUtil;
 
 import java.io.File;
 
-public class LocalStoreManager implements ILocalStoreManager {
+public class LocalStoreManagerImpl implements ILocalStoreManager {
 
     private final String basePath;
 
-    public LocalStoreManager(){
-        basePath = getStorePath();
+    public LocalStoreManagerImpl(String storeBasePath){
+        this.basePath = storeBasePath;
     }
 
-    private String getStorePath(){
-        String path = System.getProperty(ConfigConstants.LOCAL_STORE_PATH);
-        if(StringUtil.isEmpty(path)){
-            // 默认使用项目的位置
-            path = getClass().getResource("/").getPath();
-        }
-        return path;
-    }
 
     @Override
     public byte[] getClass(String app, String className) {
