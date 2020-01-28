@@ -1,4 +1,4 @@
-package com.mu.hotfix.client.config;
+package com.mu.hotfix.client.manager.config;
 
 public interface IConfigManager {
 

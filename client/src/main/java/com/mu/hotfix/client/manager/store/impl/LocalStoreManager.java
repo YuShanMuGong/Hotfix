@@ -1,9 +1,9 @@
-package com.mu.hotfix.client.store.impl;
+package com.mu.hotfix.client.manager.store.impl;
 
 import com.mu.hotfix.client.constans.ConfigConstants;
 import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
-import com.mu.hotfix.client.store.ILocalStoreManager;
+import com.mu.hotfix.client.manager.store.ILocalStoreManager;
 import com.mu.hotfix.common.util.FileUtil;
 import com.mu.hotfix.common.util.StringUtil;
 

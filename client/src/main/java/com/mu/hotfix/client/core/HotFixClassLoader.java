@@ -1,9 +1,9 @@
 package com.mu.hotfix.client.core;
 
-import com.mu.hotfix.client.cache.ICacheManager;
+import com.mu.hotfix.client.manager.cache.ICacheManager;
 import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
-import com.mu.hotfix.client.remote.IRemoteManager;
+import com.mu.hotfix.client.manager.remote.IRemoteManager;
 import com.mu.hotfix.common.bo.RemoteClassBO;
 import com.mu.hotfix.common.util.ByteArrayUtil;
 import com.mu.hotfix.common.util.StringUtil;

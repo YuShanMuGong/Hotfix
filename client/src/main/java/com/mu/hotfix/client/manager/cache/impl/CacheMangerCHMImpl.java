@@ -1,6 +1,6 @@
-package com.mu.hotfix.client.cache.impl;
+package com.mu.hotfix.client.manager.cache.impl;
 
-import com.mu.hotfix.client.cache.ICacheManager;
+import com.mu.hotfix.client.manager.cache.ICacheManager;
 
 import java.util.ArrayList;
 import java.util.List;

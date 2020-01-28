@@ -1,12 +1,14 @@
 package com.mu.hotfix.client.core;
 
-import com.mu.hotfix.client.cache.ICacheManager;
-import com.mu.hotfix.client.config.IConfigManager;
+import com.mu.hotfix.client.manager.cache.ICacheManager;
+import com.mu.hotfix.client.manager.config.IConfigManager;
 import com.mu.hotfix.client.constans.ConfigConstants;
 import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
-import com.mu.hotfix.client.remote.IRemoteManager;
-import com.mu.hotfix.client.store.ILocalStoreManager;
+import com.mu.hotfix.client.manager.remote.IRemoteManager;
+import com.mu.hotfix.client.manager.store.ILocalStoreManager;
+import com.mu.hotfix.common.bo.RemoteClassBO;
+import com.mu.hotfix.common.util.ByteArrayUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +23,7 @@ public class XHotFixClassLoaderInner extends ClassLoader {
 
     private IRemoteManager remoteManager;
 
-    private IConfigManager configManager;
+    private IConfigManager configAction;
 
     private ILocalStoreManager localStoreManager;
 
@@ -55,10 +57,10 @@ public class XHotFixClassLoaderInner extends ClassLoader {
         }
         try {
             // 从远程服务，获取class文件
-            byte[] remoteClass = remoteManager.getClass(null,name);
+            RemoteClassBO remoteClass = remoteManager.getClass(null,name);
             // 获取远程Class失败
-            if(remoteClass == null || remoteClass.length == 0){
-                if(Boolean.valueOf(configManager.getConfig(ConfigConstants.FETCH_LOCAL_IF_REMOTE_FAIL))){
+            if(remoteClass == null || ByteArrayUtil.isEmpty(remoteClass.getContent())){
+                if(Boolean.valueOf(configAction.getConfig(ConfigConstants.FETCH_LOCAL_IF_REMOTE_FAIL))){
                     throw new HotFixClientException(ErrorCodes.FETCH_REMOTE_CLASS_FAIL,"fetch remote class return null");
                 }
                 byte[] localClass = localStoreManager.getClass(null,name);
@@ -67,7 +69,7 @@ public class XHotFixClassLoaderInner extends ClassLoader {
                 }
                 return localClass;
             }
-            return remoteClass;
+            return remoteClass.getContent();
         } catch (Exception e){
             throw new HotFixClientException(ErrorCodes.UNKNOW_EXCEPTION,e);
         }

@@ -22,4 +22,14 @@ public class ErrorCodes {
      */
     public static final String PARAM_ILLEGAL = "1-E-4";
 
+    /**
+     * 文件无操作权限
+     */
+    public static final String FILE_NO_ACCESS_ERROR = "1-E-5";
+
+    /**
+     * 加载配置失败
+     */
+    public static final String LOAD_CONFIG_ERROR = "1-E-6";
+
 }

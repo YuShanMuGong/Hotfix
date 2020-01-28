@@ -11,4 +11,6 @@ public final class RemoteUrlConstants {
      */
     public static final String FETCH_CLASS = "";
 
+    public static final String FETCH_ALL_CLASS = "";
+
 }

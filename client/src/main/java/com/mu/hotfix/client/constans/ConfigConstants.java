@@ -2,6 +2,8 @@ package com.mu.hotfix.client.constans;
 
 public class ConfigConstants {
 
+    public static final String REMOTE_SRV_HOST = "";
+
     /**
      * 如果获取远程class失败，是否停止进程
      */

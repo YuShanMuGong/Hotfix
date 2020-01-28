@@ -1,4 +1,4 @@
-package com.mu.hotfix.client.store;
+package com.mu.hotfix.client.manager.store;
 
 public interface ILocalStoreManager {
 

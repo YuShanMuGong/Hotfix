@@ -1,4 +1,4 @@
-package com.mu.hotfix.client.cache;
+package com.mu.hotfix.client.manager.cache;
 
 import java.util.List;
 
