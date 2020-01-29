@@ -32,4 +32,8 @@ public class ErrorCodes {
      */
     public static final String LOAD_CONFIG_ERROR = "1-E-6";
 
+    public static final String LOCAL_SRV_START_FAIL = "1-E-7";
+
+    public static final String NO_REQUEST_HANDLER_FAIL = "1-E-8";
+
 }

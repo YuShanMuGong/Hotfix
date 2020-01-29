@@ -1,4 +1,4 @@
-package com.mu.hotfix.common.bo;
+package com.mu.hotfix.common.BO;
 
 import java.io.Serializable;
 

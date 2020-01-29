@@ -1,6 +1,6 @@
 package com.mu.hotfix.common.util;
 
-import com.mu.hotfix.common.bo.RemoteClassBO;
+import com.mu.hotfix.common.BO.RemoteClassBO;
 
 public final class MixUtil {
 

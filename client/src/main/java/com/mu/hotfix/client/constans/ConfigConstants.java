@@ -20,4 +20,8 @@ public class ConfigConstants {
 
     public static final String APP_NAME = "app_name";
 
+    public static final String CLIENT_SRV_PORT = "client_srv_port";
+
+    public static final String CLIENT_DEFAULT_SRV_PORT = "9000";
+
 }

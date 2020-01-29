@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
 import com.mu.hotfix.client.manager.store.ILocalStoreManager;
-import com.mu.hotfix.common.bo.RemoteClassBO;
+import com.mu.hotfix.common.BO.RemoteClassBO;
 import com.mu.hotfix.common.util.ByteArrayUtil;
 import com.mu.hotfix.common.util.CollectionUtil;
 import com.mu.hotfix.common.util.FileUtil;

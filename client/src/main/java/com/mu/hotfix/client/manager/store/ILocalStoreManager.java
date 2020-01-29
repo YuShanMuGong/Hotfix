@@ -1,6 +1,6 @@
 package com.mu.hotfix.client.manager.store;
 
-import com.mu.hotfix.common.bo.RemoteClassBO;
+import com.mu.hotfix.common.BO.RemoteClassBO;
 
 import java.util.List;
 

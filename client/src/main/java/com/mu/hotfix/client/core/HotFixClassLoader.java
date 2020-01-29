@@ -1,6 +1,9 @@
 package com.mu.hotfix.client.core;
 
+import com.mu.hotfix.client.constans.ClientSrvUrlConstants;
 import com.mu.hotfix.client.constans.ConfigConstants;
+import com.mu.hotfix.client.handler.IRequestHandler;
+import com.mu.hotfix.client.handler.impl.UpdateClassHandler;
 import com.mu.hotfix.client.manager.cache.ICacheManager;
 import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
@@ -11,15 +14,18 @@ import com.mu.hotfix.client.manager.remote.IRemoteManager;
 import com.mu.hotfix.client.manager.remote.impl.RemoteManagerImpl;
 import com.mu.hotfix.client.manager.store.ILocalStoreManager;
 import com.mu.hotfix.client.manager.store.impl.LocalStoreManagerImpl;
-import com.mu.hotfix.common.bo.RemoteClassBO;
+import com.mu.hotfix.client.srv.EmbeddableHttpSrv;
+import com.mu.hotfix.common.BO.RemoteClassBO;
 import com.mu.hotfix.common.util.ByteArrayUtil;
 import com.mu.hotfix.common.util.MixUtil;
 import com.mu.hotfix.common.util.StringUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class HotFixClassLoader extends ClassLoader implements IHotFixLoaderProcess {
+public class HotFixClassLoader extends ClassLoader {
 
     private AtomicInteger classLoaderInc = new AtomicInteger();
 
@@ -31,23 +37,36 @@ public class HotFixClassLoader extends ClassLoader implements IHotFixLoaderProce
     private ILocalStoreManager localStoreManager;
     private HotFixClassLoaderInner activeClassLoaderInner;
     private String appName;
+    private EmbeddableHttpSrv httpSrv;
 
     public HotFixClassLoader(ClassLoader parentClassLoader){
         this.parentClassLoader = parentClassLoader;
+    }
+
+
+    public void init(){
         // 初始化Manager
         initManagers();
+        appName = configManager.getConfig(ConfigConstants.APP_NAME);
+        int port = Integer.valueOf(configManager.getConfig(ConfigConstants.CLIENT_SRV_PORT));
+        httpSrv = new EmbeddableHttpSrv(initSrvHandlerMap(),port);
+    }
+
+    public void start(){
         // 启动时 获取远程最新的Class文件
         fetchRemoteClasses();
+        httpSrv.start();
         activeClassLoaderInner = newClassLoader();
-        appName = configManager.getConfig(ConfigConstants.APP_NAME);
+    }
+
+    private Map<String, IRequestHandler> initSrvHandlerMap(){
+        Map<String,IRequestHandler> handlerMap = new HashMap<>();
+        handlerMap.put(ClientSrvUrlConstants.UPDATE_CLASS,new UpdateClassHandler(this));
+        return handlerMap;
     }
 
     private void initManagers(){
-        String configFilePath = ConfigConstants.DEFAULT_CONFIG_FILE_PATH;
-        if(!StringUtil.isTrimEmpty(System.getProperty(ConfigConstants.CONFIG_FILE_KEY))){
-            configFilePath = System.getProperty(ConfigConstants.CONFIG_FILE_KEY);
-        }
-        configManager = new ConfigManagerImpl(configFilePath);
+        configManager = new ConfigManagerImpl(configManager.getConfig(ConfigConstants.DEFAULT_CONFIG_FILE_PATH));
         remoteManager = new RemoteManagerImpl(configManager.getConfig(ConfigConstants.REMOTE_SRV_HOST));
         cacheManager = new CacheMangerCHMImpl();
         localStoreManager = new LocalStoreManagerImpl(configManager.getConfig(ConfigConstants.LOCAL_STORE_PATH));
@@ -63,7 +82,6 @@ public class HotFixClassLoader extends ClassLoader implements IHotFixLoaderProce
         return activeClassLoaderInner.loadClass(name);
     }
 
-    @Override
     public void updateClass(RemoteClassBO updateClassBO){
         if(updateClassBO == null
                 || StringUtil.isEmpty(updateClassBO.getClassName())

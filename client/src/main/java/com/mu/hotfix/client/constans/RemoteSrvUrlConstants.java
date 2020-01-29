@@ -1,8 +1,8 @@
 package com.mu.hotfix.client.constans;
 
-public final class RemoteUrlConstants {
+public final class RemoteSrvUrlConstants {
 
-    private RemoteUrlConstants(){
+    private RemoteSrvUrlConstants(){
 
     }
 

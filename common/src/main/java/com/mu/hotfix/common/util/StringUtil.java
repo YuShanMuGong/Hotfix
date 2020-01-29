@@ -7,11 +7,11 @@ public final class StringUtil {
     }
 
     public static boolean isEmpty(String str){
-        return str != null && str.isEmpty();
+        return str == null || str.isEmpty();
     }
 
     public static boolean isTrimEmpty(String str){
-        return str != null && str.trim().isEmpty();
+        return str == null || str.trim().isEmpty();
     }
 
 }

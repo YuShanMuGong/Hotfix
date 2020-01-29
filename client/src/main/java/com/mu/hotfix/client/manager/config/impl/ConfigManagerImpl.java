@@ -12,15 +12,24 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import static com.mu.hotfix.client.constans.ConfigConstants.*;
+
 public class ConfigManagerImpl implements IConfigManager {
 
     private Map<String,String> configCache = new HashMap<>();
 
     public ConfigManagerImpl(String configPropertiesPath){
+        // 先加载默认配置
+        loadDefaultConfig();
         // 首先从配置文件中加载
         loadFromConfigFile(configPropertiesPath);
         // 然后再加载 系统的环境变量 环境变量设置的优先级高，会覆盖配置文件的配置
         loadFromSystemProperties();
+    }
+
+    private void loadDefaultConfig(){
+        configCache.put(CONFIG_FILE_KEY,DEFAULT_CONFIG_FILE_PATH);
+        configCache.put(CLIENT_SRV_PORT,CLIENT_DEFAULT_SRV_PORT);
     }
 
     private void loadFromSystemProperties() {
@@ -31,7 +40,7 @@ public class ConfigManagerImpl implements IConfigManager {
         if(StringUtil.isTrimEmpty(configPropertiesPath)){
             return;
         }
-        String path = getClass().getClassLoader().getResource("").getPath() + File.pathSeparator + configPropertiesPath;
+        String path = getClass().getClassLoader().getResource("").getPath() + configPropertiesPath;
         File file = new File(path);
         if(!file.exists()){
             return;
@@ -56,4 +65,5 @@ public class ConfigManagerImpl implements IConfigManager {
     public String getConfig(String key) {
         return configCache.get(key);
     }
+
 }

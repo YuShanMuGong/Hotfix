@@ -11,6 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <okhttp.version>3.14.2</okhttp.version>
+        <nanohttpd.version>2.2.0</nanohttpd.version>
     </properties>
     <dependencies>
 
@@ -33,6 +34,12 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.nanohttpd</groupId>
+            <artifactId>nanohttpd</artifactId>
+            <version>${nanohttpd.version}</version>
         </dependency>
 
     </dependencies>
