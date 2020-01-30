@@ -1,13 +1,13 @@
 package com.mu.hotfix.client.manager.remote;
 
-import com.mu.hotfix.common.BO.RemoteClassBO;
+import com.mu.hotfix.common.DTO.RemoteClassDTO;
 
 import java.util.List;
 
 public interface IRemoteManager {
 
-    RemoteClassBO getClass(String app , String className);
+    RemoteClassDTO getClass(String app , String className);
 
-    List<RemoteClassBO> getAllClass(String app);
+    List<RemoteClassDTO> getAllClass(String app);
 
 }

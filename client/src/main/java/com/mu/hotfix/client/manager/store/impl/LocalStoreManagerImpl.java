@@ -1,10 +1,10 @@
 package com.mu.hotfix.client.manager.store.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
 import com.mu.hotfix.client.manager.store.ILocalStoreManager;
-import com.mu.hotfix.common.BO.RemoteClassBO;
+import com.mu.hotfix.common.DTO.RemoteClassDTO;
+import com.mu.hotfix.common.constants.ErrorCodes;
 import com.mu.hotfix.common.util.ByteArrayUtil;
 import com.mu.hotfix.common.util.CollectionUtil;
 import com.mu.hotfix.common.util.FileUtil;
@@ -32,14 +32,14 @@ public class LocalStoreManagerImpl implements ILocalStoreManager {
     }
 
     @Override
-    public RemoteClassBO getClass(String app, String className) {
+    public RemoteClassDTO getClass(String app, String className) {
         String filePath = basePath + File.pathSeparator + "class" + File.pathSeparator + app + "_" + className + ".cl";
         byte[] jsonBytes = FileUtil.readFile(filePath);
-        return JSON.parseObject(new String(jsonBytes,charset),RemoteClassBO.class);
+        return JSON.parseObject(new String(jsonBytes,charset),RemoteClassDTO.class);
     }
 
     @Override
-    public void saveClass(RemoteClassBO remoteClassBO) {
+    public void saveClass(RemoteClassDTO remoteClassBO) {
         if(remoteClassBO == null
                 || ByteArrayUtil.isEmpty(remoteClassBO.getContent())
                 || StringUtil.isTrimEmpty(remoteClassBO.getApp())
@@ -54,19 +54,19 @@ public class LocalStoreManagerImpl implements ILocalStoreManager {
     }
 
     @Override
-    public void asyncSaveClasses(List<RemoteClassBO> remoteClassBOS){
+    public void asyncSaveClasses(List<RemoteClassDTO> remoteClassBOS){
         if(CollectionUtil.isEmpty(remoteClassBOS)){
             return;
         }
         asyncStoreExecutor.execute(() -> {
-            for (RemoteClassBO remoteClassBO:remoteClassBOS){
+            for (RemoteClassDTO remoteClassBO:remoteClassBOS){
                 saveClass(remoteClassBO);
             }
         });
     }
 
     @Override
-    public void asyncSaveClass(RemoteClassBO remoteClassBO) {
+    public void asyncSaveClass(RemoteClassDTO remoteClassBO) {
         asyncStoreExecutor.execute(() -> saveClass(remoteClassBO));
     }
 

@@ -1,4 +1,4 @@
-package com.mu.hotfix.client.constans;
+package com.mu.hotfix.client.constants;
 
 public class ConfigConstants {
 
@@ -6,7 +6,7 @@ public class ConfigConstants {
 
     public static final String DEFAULT_CONFIG_FILE_PATH = "hotfix_config.properties";
 
-    public static final String REMOTE_SRV_HOST = "";
+    public static final String REMOTE_SRV_HOST = "remote_srv_host";
 
     /**
      * 如果获取远程class失败，是否停止进程

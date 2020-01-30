@@ -14,8 +14,10 @@ public class HotFixClassLoaderTest {
         HotFixClassLoader hotFixClassLoader = new HotFixClassLoader(getClass().getClassLoader());
         hotFixClassLoader.init();
         hotFixClassLoader.start();
-        Class<?> cl = hotFixClassLoader.loadClass("com.mu.test.Person");
+        Class<?> cl = hotFixClassLoader.loadClass("com.mu.learn.test.Test");
         Assert.assertNotNull(cl);
+        System.out.println(cl.getSimpleName());
+        cl.getDeclaredMethod("show").invoke(null);
     }
 
     @Test

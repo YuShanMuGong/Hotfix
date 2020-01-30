@@ -1,8 +1,8 @@
 package com.mu.hotfix.client.manager.config.impl;
 
-import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
 import com.mu.hotfix.client.manager.config.IConfigManager;
+import com.mu.hotfix.common.constants.ErrorCodes;
 import com.mu.hotfix.common.util.StringUtil;
 
 import java.io.File;
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.mu.hotfix.client.constans.ConfigConstants.*;
+import static com.mu.hotfix.client.constants.ConfigConstants.*;
 
 public class ConfigManagerImpl implements IConfigManager {
 

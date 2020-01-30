@@ -1,8 +1,8 @@
 package com.mu.hotfix.client.handler;
 
 
-import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
+import com.mu.hotfix.common.constants.ErrorCodes;
 import com.mu.hotfix.common.util.CollectionUtil;
 import com.mu.hotfix.common.util.StringUtil;
 

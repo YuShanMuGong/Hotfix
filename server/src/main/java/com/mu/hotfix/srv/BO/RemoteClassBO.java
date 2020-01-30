@@ -1,16 +1,12 @@
-package com.mu.hotfix.common.BO;
+package com.mu.hotfix.srv.BO;
 
-import java.io.Serializable;
-
-public class RemoteClassBO implements Serializable {
-
-    private static final long serialVersionUID = 413456765432L;
+public class RemoteClassBO {
 
     private String app;
 
     private String className;
 
-    private int version;
+    private String version;
 
     private byte[] content;
 
@@ -30,11 +26,11 @@ public class RemoteClassBO implements Serializable {
         this.className = className;
     }
 
-    public int getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 

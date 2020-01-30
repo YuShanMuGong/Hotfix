@@ -1,17 +1,18 @@
 package com.mu.hotfix.client.manager.store;
 
-import com.mu.hotfix.common.BO.RemoteClassBO;
+
+import com.mu.hotfix.common.DTO.RemoteClassDTO;
 
 import java.util.List;
 
 public interface ILocalStoreManager {
 
-    RemoteClassBO getClass(String app , String className);
+    RemoteClassDTO getClass(String app , String className);
 
-    void saveClass(RemoteClassBO remoteClassBO);
+    void saveClass(RemoteClassDTO remoteClassBO);
 
-    void asyncSaveClasses(List<RemoteClassBO> remoteClassBOS);
+    void asyncSaveClasses(List<RemoteClassDTO> remoteClassBOS);
 
-    void asyncSaveClass(RemoteClassBO remoteClassBO);
+    void asyncSaveClass(RemoteClassDTO remoteClassBO);
 
 }

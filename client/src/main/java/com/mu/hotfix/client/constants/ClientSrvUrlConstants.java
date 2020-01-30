@@ -1,4 +1,4 @@
-package com.mu.hotfix.client.constans;
+package com.mu.hotfix.client.constants;
 
 public final class ClientSrvUrlConstants {
 

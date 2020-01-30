@@ -1,11 +1,11 @@
 package com.mu.hotfix.client.srv;
 
 import com.alibaba.fastjson.JSON;
-import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
 import com.mu.hotfix.client.handler.IRequestHandler;
-import com.mu.hotfix.client.util.ExceptionHandler;
+import com.mu.hotfix.client.util.ExceptionUtil;
 import com.mu.hotfix.common.DTO.ResultDTO;
+import com.mu.hotfix.common.constants.ErrorCodes;
 import fi.iki.elonen.NanoHTTPD;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ public class EmbeddableHttpSrv extends NanoHTTPD {
             }
             resultDTO = requestHandler.handle(session.getParms());
         }catch (Exception e){
-            resultDTO = ExceptionHandler.handle(e);
+            resultDTO = ExceptionUtil.handle(e);
         }
         return newFixedLengthResponse(JSON.toJSONString(resultDTO));
     }

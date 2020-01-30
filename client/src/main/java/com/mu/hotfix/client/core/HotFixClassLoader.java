@@ -1,11 +1,10 @@
 package com.mu.hotfix.client.core;
 
-import com.mu.hotfix.client.constans.ClientSrvUrlConstants;
-import com.mu.hotfix.client.constans.ConfigConstants;
+import com.mu.hotfix.client.constants.ClientSrvUrlConstants;
+import com.mu.hotfix.client.constants.ConfigConstants;
 import com.mu.hotfix.client.handler.IRequestHandler;
 import com.mu.hotfix.client.handler.impl.UpdateClassHandler;
 import com.mu.hotfix.client.manager.cache.ICacheManager;
-import com.mu.hotfix.client.constans.ErrorCodes;
 import com.mu.hotfix.client.exception.HotFixClientException;
 import com.mu.hotfix.client.manager.cache.impl.CacheMangerCHMImpl;
 import com.mu.hotfix.client.manager.config.IConfigManager;
@@ -15,7 +14,8 @@ import com.mu.hotfix.client.manager.remote.impl.RemoteManagerImpl;
 import com.mu.hotfix.client.manager.store.ILocalStoreManager;
 import com.mu.hotfix.client.manager.store.impl.LocalStoreManagerImpl;
 import com.mu.hotfix.client.srv.EmbeddableHttpSrv;
-import com.mu.hotfix.common.BO.RemoteClassBO;
+import com.mu.hotfix.common.DTO.RemoteClassDTO;
+import com.mu.hotfix.common.constants.ErrorCodes;
 import com.mu.hotfix.common.util.ByteArrayUtil;
 import com.mu.hotfix.common.util.MixUtil;
 import com.mu.hotfix.common.util.StringUtil;
@@ -66,7 +66,8 @@ public class HotFixClassLoader extends ClassLoader {
     }
 
     private void initManagers(){
-        configManager = new ConfigManagerImpl(configManager.getConfig(ConfigConstants.DEFAULT_CONFIG_FILE_PATH));
+        String configFilePath = System.getProperty(ConfigConstants.CONFIG_FILE_KEY,ConfigConstants.DEFAULT_CONFIG_FILE_PATH);
+        configManager = new ConfigManagerImpl(configFilePath);
         remoteManager = new RemoteManagerImpl(configManager.getConfig(ConfigConstants.REMOTE_SRV_HOST));
         cacheManager = new CacheMangerCHMImpl();
         localStoreManager = new LocalStoreManagerImpl(configManager.getConfig(ConfigConstants.LOCAL_STORE_PATH));
@@ -82,7 +83,7 @@ public class HotFixClassLoader extends ClassLoader {
         return activeClassLoaderInner.loadClass(name);
     }
 
-    public void updateClass(RemoteClassBO updateClassBO){
+    public void updateClass(RemoteClassDTO updateClassBO){
         if(updateClassBO == null
                 || StringUtil.isEmpty(updateClassBO.getClassName())
                 || ByteArrayUtil.isEmpty(updateClassBO.getContent())){
@@ -104,13 +105,13 @@ public class HotFixClassLoader extends ClassLoader {
         }
         try {
             // 从远程服务，获取class文件
-            RemoteClassBO remoteClass = remoteManager.getClass(appName,name);
+            RemoteClassDTO remoteClass = remoteManager.getClass(appName,name);
             // 获取远程Class失败
-            if(remoteClass == null || ByteArrayUtil.isEmpty(remoteClass.getContent())){
+            if(!MixUtil.isValid(remoteClass)){
                 if(Boolean.valueOf(configManager.getConfig(ConfigConstants.FETCH_LOCAL_IF_REMOTE_FAIL))){
                     throw new HotFixClientException(ErrorCodes.FETCH_REMOTE_CLASS_FAIL,"fetch remote class return null");
                 }
-                RemoteClassBO remoteClassBO = localStoreManager.getClass(appName,name);
+                RemoteClassDTO remoteClassBO = localStoreManager.getClass(appName,name);
                 if(!MixUtil.isValid(remoteClassBO)){
                     throw new HotFixClientException(ErrorCodes.FETCH_CLASS_FAIL,"can not find class");
                 }
@@ -123,8 +124,8 @@ public class HotFixClassLoader extends ClassLoader {
     }
 
     private void fetchRemoteClasses(){
-        List<RemoteClassBO> remoteClassBOList = remoteManager.getAllClass(appName);
-        for (RemoteClassBO classBO : remoteClassBOList){
+        List<RemoteClassDTO> remoteClassBOList = remoteManager.getAllClass(appName);
+        for (RemoteClassDTO classBO : remoteClassBOList){
             cacheManager.put(classBO.getClassName(),classBO.getContent());
         }
         localStoreManager.asyncSaveClasses(remoteClassBOList);
