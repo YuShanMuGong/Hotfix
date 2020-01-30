@@ -28,6 +28,9 @@ public class EmbeddableHttpSrv extends NanoHTTPD {
         try {
             String url = session.getUri();
             IRequestHandler requestHandler = requestHandlersMap.get(url);
+            if(url.startsWith("/")){
+                requestHandler = requestHandlersMap.get(url.substring(1));
+            }
             if(requestHandler == null){
                 throw new HotFixClientException(ErrorCodes.NO_REQUEST_HANDLER_FAIL,"can not find requestHandler");
             }

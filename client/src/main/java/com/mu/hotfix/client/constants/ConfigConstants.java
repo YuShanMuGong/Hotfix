@@ -18,6 +18,9 @@ public class ConfigConstants {
      */
     public static final String LOCAL_STORE_PATH = "local_store_path";
 
+    /**
+     * 应用名称
+     */
     public static final String APP_NAME = "app_name";
 
     /**

@@ -32,8 +32,15 @@ public class ErrorCodes {
      */
     public static final String LOAD_CONFIG_ERROR = "1-E-6";
 
+    /**
+     * Client服务启动失败
+     */
     public static final String LOCAL_SRV_START_FAIL = "1-E-7";
 
+
+    /**
+     * 没有请求处理者
+     */
     public static final String NO_REQUEST_HANDLER_FAIL = "1-E-8";
 
     /**

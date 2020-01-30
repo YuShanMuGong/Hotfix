@@ -9,11 +9,11 @@ public final class ClientSrvUrlConstants {
     /**
      * 更新类
      */
-    public static final String UPDATE_CLASS = "/updateClass";
+    public static final String UPDATE_CLASS = "updateClass";
 
     /**
      * 列出加载过的类信息
      */
-    public static final String LIST_LOADED_CLASS = "/listLoadedClass";
+    public static final String LIST_LOADED_CLASS = "listLoadedClass";
 
 }

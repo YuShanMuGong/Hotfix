@@ -19,6 +19,7 @@ import com.mu.hotfix.common.DTO.RemoteClassDTO;
 import com.mu.hotfix.common.constants.ErrorCodes;
 import com.mu.hotfix.common.util.ByteArrayUtil;
 import com.mu.hotfix.common.util.MixUtil;
+import com.mu.hotfix.common.util.PathUtil;
 import com.mu.hotfix.common.util.StringUtil;
 
 import java.util.HashMap;

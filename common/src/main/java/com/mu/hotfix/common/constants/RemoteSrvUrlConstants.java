@@ -11,6 +11,9 @@ public final class RemoteSrvUrlConstants {
      */
     public static final String FETCH_CLASS = "/fetch/class";
 
+    /**
+     * 获取远程一个APP下面所有API 接口
+     */
     public static final String FETCH_ALL_CLASS = "/fetch/classes";
 
 }
