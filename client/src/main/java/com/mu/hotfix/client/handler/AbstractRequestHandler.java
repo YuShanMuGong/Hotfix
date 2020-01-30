@@ -8,7 +8,7 @@ import com.mu.hotfix.common.util.StringUtil;
 
 import java.util.Map;
 
-public abstract class AbstractRequstHanlder<T> implements IRequestHandler<T> {
+public abstract class AbstractRequestHandler<T> implements IRequestHandler<T> {
 
     protected void validParams(Map<String,String> params , String... mustKeys){
         if(mustKeys == null || mustKeys.length == 0){

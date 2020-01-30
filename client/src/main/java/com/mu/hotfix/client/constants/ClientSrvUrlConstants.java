@@ -6,6 +6,14 @@ public final class ClientSrvUrlConstants {
 
     }
 
-    public static final String UPDATE_CLASS = "updateClass";
+    /**
+     * 更新类
+     */
+    public static final String UPDATE_CLASS = "/updateClass";
+
+    /**
+     * 列出加载过的类信息
+     */
+    public static final String LIST_LOADED_CLASS = "/listLoadedClass";
 
 }

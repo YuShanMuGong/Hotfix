@@ -36,4 +36,9 @@ public class ErrorCodes {
 
     public static final String NO_REQUEST_HANDLER_FAIL = "1-E-8";
 
+    /**
+     * 错误的客户端状态
+     */
+    public static final String ERROR_CLIENT_STATUS = "1-E-9";
+
 }

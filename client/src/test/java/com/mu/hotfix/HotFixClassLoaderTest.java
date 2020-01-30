@@ -18,6 +18,7 @@ public class HotFixClassLoaderTest {
         Assert.assertNotNull(cl);
         System.out.println(cl.getSimpleName());
         cl.getDeclaredMethod("show").invoke(null);
+        LockSupport.park();
     }
 
     @Test

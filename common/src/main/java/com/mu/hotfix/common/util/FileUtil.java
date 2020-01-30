@@ -28,6 +28,19 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 确保文件夹存在
+     * @param dirPath
+     */
+    public static void dirExist(String dirPath){
+        File file = new File(dirPath);
+        if(!file.exists() || !file.isDirectory()){
+            if(!file.mkdirs()){
+                throw new IllegalStateException("mkdirs fail");
+            }
+        }
+    }
+
     public static void newOrReplaceFile(String filePath , byte[] contents){
         if(StringUtil.isEmpty(filePath) || ByteArrayUtil.isEmpty(contents)){
             throw new IllegalArgumentException("newOrReplaceFile params error");

@@ -1,19 +1,19 @@
 package com.mu.hotfix.client.handler.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.mu.hotfix.client.core.HotFixClassLoader;
-import com.mu.hotfix.client.handler.AbstractRequstHanlder;
+import com.mu.hotfix.client.core.IHotFixClientProcess;
+import com.mu.hotfix.client.handler.AbstractRequestHandler;
 import com.mu.hotfix.common.DTO.RemoteClassDTO;
 import com.mu.hotfix.common.DTO.ResultDTO;
 
 import java.util.Map;
 
-public class UpdateClassHandler extends AbstractRequstHanlder<Boolean> {
+public class UpdateClassHandler extends AbstractRequestHandler<Boolean> {
 
-    private HotFixClassLoader hotFixClassLoader;
+    private IHotFixClientProcess hotFixClassLoader;
     private static final String CLASS = "class";
 
-    public UpdateClassHandler(HotFixClassLoader hotFixClassLoader){
+    public UpdateClassHandler(IHotFixClientProcess hotFixClassLoader){
         this.hotFixClassLoader = hotFixClassLoader;
     }
 

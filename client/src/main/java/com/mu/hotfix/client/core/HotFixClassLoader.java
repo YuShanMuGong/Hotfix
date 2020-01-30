@@ -3,6 +3,7 @@ package com.mu.hotfix.client.core;
 import com.mu.hotfix.client.constants.ClientSrvUrlConstants;
 import com.mu.hotfix.client.constants.ConfigConstants;
 import com.mu.hotfix.client.handler.IRequestHandler;
+import com.mu.hotfix.client.handler.impl.ListLoadedClassHandler;
 import com.mu.hotfix.client.handler.impl.UpdateClassHandler;
 import com.mu.hotfix.client.manager.cache.ICacheManager;
 import com.mu.hotfix.client.exception.HotFixClientException;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class HotFixClassLoader extends ClassLoader {
+public class HotFixClassLoader extends ClassLoader implements IHotFixClientProcess {
 
     private AtomicInteger classLoaderInc = new AtomicInteger();
 
@@ -62,6 +63,7 @@ public class HotFixClassLoader extends ClassLoader {
     private Map<String, IRequestHandler> initSrvHandlerMap(){
         Map<String,IRequestHandler> handlerMap = new HashMap<>();
         handlerMap.put(ClientSrvUrlConstants.UPDATE_CLASS,new UpdateClassHandler(this));
+        handlerMap.put(ClientSrvUrlConstants.LIST_LOADED_CLASS,new ListLoadedClassHandler(this));
         return handlerMap;
     }
 
@@ -74,7 +76,7 @@ public class HotFixClassLoader extends ClassLoader {
     }
 
     @Override
-    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
        return activeClassLoaderInner.loadClass(name,resolve);
     }
 
@@ -83,22 +85,31 @@ public class HotFixClassLoader extends ClassLoader {
         return activeClassLoaderInner.loadClass(name);
     }
 
-    public void updateClass(RemoteClassDTO updateClassBO){
-        if(updateClassBO == null
-                || StringUtil.isEmpty(updateClassBO.getClassName())
-                || ByteArrayUtil.isEmpty(updateClassBO.getContent())){
+    @Override
+    public void updateClass(RemoteClassDTO updateClassDTO){
+        if(updateClassDTO == null
+                || StringUtil.isEmpty(updateClassDTO.getClassName())
+                || ByteArrayUtil.isEmpty(updateClassDTO.getContent())){
             throw new HotFixClientException(ErrorCodes.PARAM_ILLEGAL,"update class param illegal");
         }
-        cacheManager.put(updateClassBO.getClassName(),updateClassBO.getContent());
-        localStoreManager.asyncSaveClass(updateClassBO);
+        cacheManager.put(updateClassDTO.getClassName(),updateClassDTO);
+        localStoreManager.asyncSaveClass(updateClassDTO);
         activeClassLoaderInner = newClassLoader();
+    }
+
+    @Override
+    public List<RemoteClassDTO> listLoadedClass() {
+        if(activeClassLoaderInner == null){
+            throw new HotFixClientException(ErrorCodes.ERROR_CLIENT_STATUS,"active classloader is null");
+        }
+        return activeClassLoaderInner.getLoadedClass();
     }
 
     private HotFixClassLoaderInner newClassLoader(){
         return new HotFixClassLoaderInner(parentClassLoader,classLoaderInc.getAndIncrement()+"",this);
     }
 
-    byte[] findClassBytes(String name){
+    RemoteClassDTO findClassBytes(String name){
         // 缓存命中
         if(cacheManager.get(name) != null){
             return cacheManager.get(name);
@@ -111,24 +122,24 @@ public class HotFixClassLoader extends ClassLoader {
                 if(Boolean.valueOf(configManager.getConfig(ConfigConstants.FETCH_LOCAL_IF_REMOTE_FAIL))){
                     throw new HotFixClientException(ErrorCodes.FETCH_REMOTE_CLASS_FAIL,"fetch remote class return null");
                 }
-                RemoteClassDTO remoteClassBO = localStoreManager.getClass(appName,name);
-                if(!MixUtil.isValid(remoteClassBO)){
+                RemoteClassDTO remoteClassDTO = localStoreManager.getClass(appName,name);
+                if(!MixUtil.isValid(remoteClassDTO)){
                     throw new HotFixClientException(ErrorCodes.FETCH_CLASS_FAIL,"can not find class");
                 }
-                return remoteClassBO.getContent();
+                return remoteClassDTO;
             }
-            return remoteClass.getContent();
+            return remoteClass;
         } catch (Exception e){
             throw new HotFixClientException(ErrorCodes.UN_KNOW_EXCEPTION,e);
         }
     }
 
     private void fetchRemoteClasses(){
-        List<RemoteClassDTO> remoteClassBOList = remoteManager.getAllClass(appName);
-        for (RemoteClassDTO classBO : remoteClassBOList){
-            cacheManager.put(classBO.getClassName(),classBO.getContent());
+        List<RemoteClassDTO> remoteClassList = remoteManager.getAllClass(appName);
+        for (RemoteClassDTO classDTO : remoteClassList){
+            cacheManager.put(classDTO.getClassName(),classDTO);
         }
-        localStoreManager.asyncSaveClasses(remoteClassBOList);
+        localStoreManager.asyncSaveClasses(remoteClassList);
     }
 
 }

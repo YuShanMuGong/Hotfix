@@ -25,7 +25,7 @@ public class LocalStoreManagerImpl implements ILocalStoreManager {
     public LocalStoreManagerImpl(String storeBasePath){
         this.basePath = storeBasePath;
         asyncStoreExecutor = Executors.newSingleThreadExecutor(r -> {
-            Thread thread = new Thread();
+            Thread thread = new Thread(r);
             thread.setName("LocalStoreManagerImpl-Async-Write-Thread");
             return thread;
         });
@@ -33,7 +33,7 @@ public class LocalStoreManagerImpl implements ILocalStoreManager {
 
     @Override
     public RemoteClassDTO getClass(String app, String className) {
-        String filePath = basePath + File.pathSeparator + "class" + File.pathSeparator + app + "_" + className + ".cl";
+        String filePath = basePath + File.separator + "class" + File.separator + app + "_" + className + ".cl";
         byte[] jsonBytes = FileUtil.readFile(filePath);
         return JSON.parseObject(new String(jsonBytes,charset),RemoteClassDTO.class);
     }
@@ -46,8 +46,9 @@ public class LocalStoreManagerImpl implements ILocalStoreManager {
                 || StringUtil.isTrimEmpty(remoteClassBO.getClassName())){
             throw new HotFixClientException(ErrorCodes.PARAM_ILLEGAL,"save class params illegal");
         }
-        String filePath = basePath + File.pathSeparator + "class"
-                + File.pathSeparator + remoteClassBO.getApp()
+        String dirPath = basePath + File.separator + "class";
+        FileUtil.dirExist(dirPath);
+        String filePath = dirPath + File.separator + remoteClassBO.getApp()
                 + "_" + remoteClassBO.getClassName() + ".cl";
         String json = JSON.toJSONString(remoteClassBO);
         FileUtil.newOrReplaceFile(filePath,json.getBytes(charset));

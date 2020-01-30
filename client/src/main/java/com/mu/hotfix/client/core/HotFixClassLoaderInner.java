@@ -1,5 +1,7 @@
 package com.mu.hotfix.client.core;
 
+import com.mu.hotfix.common.DTO.RemoteClassDTO;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,12 +12,12 @@ public class HotFixClassLoaderInner extends ClassLoader {
 
     private String classLoaderName;
 
-    private List<String> loadedClassName;
+    private List<RemoteClassDTO> loadedClass;
 
     HotFixClassLoaderInner(ClassLoader parentClassLoader , String name , HotFixClassLoader hotFixClassLoader){
         super(parentClassLoader);
         this.classLoaderName = name;
-        loadedClassName = new ArrayList<>();
+        loadedClass = new ArrayList<>();
         this.hotFixClassLoader = hotFixClassLoader;
     }
 
@@ -26,14 +28,15 @@ public class HotFixClassLoaderInner extends ClassLoader {
 
     @Override
     protected Class<?> findClass(String name){
-        byte[] classBytes = hotFixClassLoader.findClassBytes(name);
+        RemoteClassDTO remoteClassDTO = hotFixClassLoader.findClassBytes(name);
+        byte[] classBytes = remoteClassDTO.getContent();
         Class<?> cl = defineClass(name,classBytes,0,classBytes.length);
-        loadedClassName.add(name);
+        loadedClass.add(remoteClassDTO);
         return cl;
     }
 
-    public List<String> getLoadedClassNameList(){
-        return Collections.unmodifiableList(loadedClassName);
+    public List<RemoteClassDTO> getLoadedClass(){
+        return Collections.unmodifiableList(loadedClass);
     }
 
     @Override
